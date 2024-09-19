@@ -1,2 +1,2 @@
-# Sentiment_Analysis_for_Financial_News
-Building, experimenting, and deploying a machine learning-based solution for sentiment analysis on financial news articles
+# Sentiment Analysis for Financial News
+Building, experimenting, and deploying a machine learning-based solution for sentiment analysis on financial news articles. The goal is to classify the sentiment of financial news as positive, negative, or neutral to assist investors and market analysts in making informed decisions. The project involves data acquisition, model development, fine-tuning, and deployment of the system for real-world use.
