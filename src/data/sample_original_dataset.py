@@ -22,25 +22,31 @@ stratify_percentage = 0.9  # Adjust this as needed
 for i in range(1, num_samples + 1):
     # Convert the Hugging Face Dataset object to a pandas DataFrame
     df = pd.DataFrame(dataset['train'])
-    
+
     # Extract the 'label' column for stratification and calculate class counts
     class_counts = df['label'].value_counts()
-    
+
     # Calculate how many samples to take from each class based on stratify_percentage
     rows_per_class = (class_counts * stratify_percentage).astype(int)
-    
+
     # Ensure the total number of rows doesn't exceed the desired sample size
-    rows_per_class = rows_per_class.apply(lambda x: min(x, rows_per_sample // len(class_counts)))
+    rows_per_class = rows_per_class.apply(
+        lambda x: min(x, rows_per_sample // len(class_counts)))
 
     # Stratified sampling: Collect samples from each class
     stratified_sample = pd.concat([
-        df[df['label'] == label].sample(n=rows_per_class[label], random_state=i, replace=False)
+        df[df['label'] == label].sample(n=rows_per_class[label],
+                                        random_state=i,
+                                        replace=False)
         for label in class_counts.index
     ])
-    
+
     # Shuffle the final sample and ensure it has the correct total number of rows
-    stratified_sample = stratified_sample.sample(frac=1, random_state=i).reset_index(drop=True)
-    
+    stratified_sample = stratified_sample.sample(
+        frac=1, random_state=i).reset_index(drop=True)
+
     # Save the stratified sample to CSV
     stratified_sample.to_csv(f'{sample_dir}/sample{i}.csv', index=False)
-    print(f'Saved stratified sample {i} with {len(stratified_sample)} rows to sample{i}.csv')
+    print(
+        f'Saved stratified sample {i} with {len(stratified_sample)} rows to sample{i}.csv'
+    )
