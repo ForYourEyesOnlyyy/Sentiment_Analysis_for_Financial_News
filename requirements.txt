@@ -6,6 +6,7 @@ certifi==2024.8.30
 charset-normalizer==3.3.2
 datasets==3.0.0
 dill==0.3.8
+dvc
 filelock==3.16.1
 frozenlist==1.4.1
 fsspec==2024.6.1
