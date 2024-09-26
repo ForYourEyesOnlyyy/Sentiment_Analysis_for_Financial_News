@@ -6,6 +6,8 @@ set -e
 # Create datastore directory for DVC remote storage
 mkdir -p datastore
 
+[ -d ".dvc" ] && rm -rf ".dvc"
+
 # Initialize DVC
 dvc init
 
