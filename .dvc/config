@@ -1,4 +1,4 @@
 [core]
     remote = localstore
 ['remote "localstore"']
-    url = /home/roma/5sem/Sentiment_Analysis_for_Financial_News/datastore
+    url = /Users/elisey/Study/Practical_ML/Project/Sentiment_Analysis_for_Financial_News/datastore
