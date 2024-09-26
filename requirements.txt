@@ -10,6 +10,7 @@ dvc
 filelock==3.16.1
 frozenlist==1.4.1
 fsspec==2024.6.1
+great_expectations
 huggingface-hub==0.25.0
 idna==3.10
 ipykernel
