@@ -7,17 +7,17 @@ from transformers import AutoTokenizer
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-data_path = "../data/processed/twitter-financial-news-sentiment/samples/sample1.csv"
+data_path = "data/processed/twitter-financial-news-sentiment/samples/sample1.csv"
 label_column = "label"
 text_column = "text"
 has_source_column = "has_source"
 
 
-def load_data(path: str) -> pd.DataFrame:
-    return pd.read_csv(path)
+def load_data() -> pd.DataFrame:
+    return pd.read_csv(data_path)
 
 
-def preprocess(data: pd.DataFrame) -> pd.DataFrame:
+def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
     def process_source_links(row):
         if 'https' in row[text_column]:
@@ -68,17 +68,15 @@ def split(data, ratio=0.33):
                                                         y,
                                                         test_size=ratio,
                                                         random_state=42)
-    train_texts, train_has_source = zip(*X_train)
-    test_texts, test_has_source = zip(*X_test)
     return {
         "train": {
-            text_column: train_texts,
-            has_source_column: train_has_source,
+            text_column: X_train[text_column],
+            has_source_column: X_train[has_source_column],
             label_column: y_train
         },
         "test": {
-            text_column: test_texts,
-            has_source_column: test_has_source,
+            text_column: X_test[text_column],
+            has_source_column: X_test[has_source_column],
             label_column: y_test
         }
     }
