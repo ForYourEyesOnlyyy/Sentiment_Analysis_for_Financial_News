@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 
 from sklearn.model_selection import train_test_split
 
@@ -6,15 +7,23 @@ from transformers import AutoTokenizer
 import torch
 from torch.utils.data import Dataset, DataLoader
 
+data_path = "../data/processed/twitter-financial-news-sentiment/samples/sample1.csv"
+label_column = "label"
+text_column = "text"
+has_source_column = "has_source"
+
+def load_data(path):
+    return pd.read_csv(path)
+
 
 def preprocess(data):
 
     def process_source_links(row):
-        if 'https' in row['text']:
-            row['text'] = re.sub(r'http\S+', '', row['text']).strip()
-            row['has_source'] = 1
+        if 'https' in row[text_column]:
+            row[text_column] = re.sub(r'http\S+', '', row[text_column]).strip()
+            row[has_source_column] = 1
         else:
-            row['has_source'] = 0
+            row[has_source_column] = 0
         return row
 
     data = data.apply(process_source_links, axis=1)
@@ -52,8 +61,8 @@ class FinancialTweetsDataset(Dataset):
 
 
 def split_and_get_loaders(data, ratio=0.33, batch_size=32, tokenizer='bert'):
-    X = data.drop(columns=['label'])
-    y = data['label']
+    X = data.drop(columns=[label_column])
+    y = data[label_column]
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
                                                         test_size=ratio,
@@ -62,11 +71,11 @@ def split_and_get_loaders(data, ratio=0.33, batch_size=32, tokenizer='bert'):
     if tokenizer == "bert":
         tok = AutoTokenizer.from_pretrained('bert-base-uncased')
 
-        train_dataset = FinancialTweetsDataset(X_train['text'].tolist(),
-                                               X_train['has_source'].tolist(),
+        train_dataset = FinancialTweetsDataset(X_train[text_column].tolist(),
+                                               X_train[has_source_column].tolist(),
                                                y_train.tolist(), tok)
-        val_dataset = FinancialTweetsDataset(X_test['text'].tolist(),
-                                             X_test['has_source'].tolist(),
+        val_dataset = FinancialTweetsDataset(X_test[text_column].tolist(),
+                                             X_test[has_source_column].tolist(),
                                              y_test.tolist(), tok)
 
         train_dataloader = DataLoader(dataset=train_dataset,
