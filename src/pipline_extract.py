@@ -1,7 +1,5 @@
 from zenml.client import Client
 
-from zenml.steps import BaseStep
-
 
 def extract_latest_loaders() -> dict:
     # Extract the latest loaders
