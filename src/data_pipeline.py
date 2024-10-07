@@ -1,32 +1,43 @@
 from zenml.steps import step
 from zenml.pipelines import pipeline
 
-
 import pandas as pd
 
 import data
 
+
 @step
-def load()-> pd.DataFrame:
+def load() -> pd.DataFrame:
     return data.load_data()
+
+
 @step
 def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     return data.preprocess_data(df)
+
+
 @step
-def split(df: pd.DataFrame, ratio: float=0.33) -> dict:
+def split(df: pd.DataFrame, ratio: float = 0.33) -> dict:
     return data.split(df, ratio=ratio)
+
+
 @step
-def prepare_dataloaders(train_test: dict, batch_size: int=32, tokenizer: str='bert-base-uncased') -> dict:
+def prepare_dataloaders(train_test: dict,
+                        batch_size: int = 32,
+                        tokenizer: str = 'bert-base-uncased') -> dict:
     train = train_test['train']
     test = train_test['test']
 
-    train_loader = data.get_loader(train, batch_size=batch_size, is_validation=False, tokenizer_name=tokenizer)
-    val_loader = data.get_loader(test, batch_size=batch_size, is_validation=True, tokenizer_name=tokenizer)
+    train_loader = data.get_loader(train,
+                                   batch_size=batch_size,
+                                   is_validation=False,
+                                   tokenizer_name=tokenizer)
+    val_loader = data.get_loader(test,
+                                 batch_size=batch_size,
+                                 is_validation=True,
+                                 tokenizer_name=tokenizer)
 
-    return {
-        'train': train_loader,
-        'validation': val_loader
-    }
+    return {'train': train_loader, 'validation': val_loader}
 
 
 @pipeline
@@ -41,7 +52,6 @@ data_pipeline_instance = data_pipeline(
     load=load(),
     preprocess=preprocess(),
     split=split(),
-    prepare_dataloaders=prepare_dataloaders()
-)
+    prepare_dataloaders=prepare_dataloaders())
 
 data_pipeline_instance.run()
