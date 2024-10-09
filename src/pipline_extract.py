@@ -1,4 +1,6 @@
 from zenml.client import Client
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 def extract_latest_loaders() -> dict:
@@ -11,4 +13,5 @@ def extract_latest_loaders() -> dict:
     artifact = loaders_step.output.load()
     train_loader = artifact["train"]
     val_loader = artifact["validation"]
+    print(f"Pipeline artifact [: {latest_run.id}] loaded successfully")
     return {"train": train_loader, "validation": val_loader}

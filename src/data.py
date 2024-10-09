@@ -33,7 +33,7 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
 class FinancialTweetsDataset(Dataset):
 
-    def __init__(self, texts, has_source, labels, tokenizer, max_length=32):
+    def __init__(self, texts, has_source, labels, tokenizer, max_length=100):
         self.texts = texts
         self.has_source = has_source
         self.labels = labels
@@ -51,6 +51,7 @@ class FinancialTweetsDataset(Dataset):
         encoding = self.tokenizer(text,
                                   padding="max_length",
                                   max_length=self.max_length,
+                                  truncation=True,
                                   return_tensors='pt')
 
         return {
