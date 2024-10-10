@@ -164,4 +164,3 @@ cython_debug/
 datastore
 data/dvc/sample.csv
 .dvc/config
-notebooks/mlruns/

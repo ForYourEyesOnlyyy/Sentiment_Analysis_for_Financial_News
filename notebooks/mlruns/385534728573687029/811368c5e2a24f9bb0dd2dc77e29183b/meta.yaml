@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/notebooks/mlruns/385534728573687029/811368c5e2a24f9bb0dd2dc77e29183b/artifacts
+end_time: 1728482586464
+entry_point_name: ''
+experiment_id: '385534728573687029'
+lifecycle_stage: active
+run_id: 811368c5e2a24f9bb0dd2dc77e29183b
+run_name: stylish-lamb-21
+run_uuid: 811368c5e2a24f9bb0dd2dc77e29183b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1728482498933
+status: 3
+tags: []
+user_id: maxmartyshov

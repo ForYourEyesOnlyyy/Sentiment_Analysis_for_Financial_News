@@ -1,0 +1,21 @@
+artifact_path: simple_sentiment_analysis_model
+flavors:
+  python_function:
+    config:
+      device: null
+    data: data
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pytorch
+    pickle_module_name: mlflow.pytorch.pickle_module
+    python_version: 3.12.6
+  pytorch:
+    code: null
+    model_data: data
+    pytorch_version: 2.4.1
+mlflow_version: 2.16.2
+model_size_bytes: 438054426
+model_uuid: f5fbd499358f408f82b9eacb82a2f856
+run_id: 811368c5e2a24f9bb0dd2dc77e29183b
+utc_time_created: '2024-10-09 14:02:30.844089'
