@@ -1,5 +1,6 @@
-aliases: {}
-creation_timestamp: 1728645889077
+aliases:
+  champion: '2'
+creation_timestamp: 1728653920702
 description: null
-last_updated_timestamp: 1728645889078
+last_updated_timestamp: 1728654139997
 name: simple_sentiment_analysis_model
