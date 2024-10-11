@@ -1,2 +1,4 @@
-import sys 
-sys.path.append("/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/notebooks")
+import mlflow
+
+model = mlflow.pytorch.load_model(model_uri=f"models:/simple_sentiment_analysis_model/latest")
+print(model)
