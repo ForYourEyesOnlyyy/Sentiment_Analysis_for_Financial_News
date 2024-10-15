@@ -12,6 +12,15 @@ label_column = "label"
 text_column = "text"
 has_source_column = "has_source"
 
+sentiments = {
+    0: "Negative",
+    1: "Neutral",
+    2: "Positive"
+    }
+
+
+def make_dataframe_with_dummy_label(tweet:str) -> pd.DataFrame:
+    return pd.DataFrame({text_column: [tweet], label_column: [0]})
 
 def load_data() -> pd.DataFrame:
     return pd.read_csv(data_path)
@@ -99,3 +108,4 @@ def get_loader(data,
                             batch_size=batch_size,
                             shuffle=(not is_validation))
     return dataloader
+
