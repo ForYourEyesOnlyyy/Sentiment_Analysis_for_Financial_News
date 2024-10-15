@@ -1,9 +1,12 @@
+import data
 from zenml.steps import step
 from zenml.pipelines import pipeline
-
 import pandas as pd
+import sys
 
-import data
+sys.path.append(
+    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/src"
+)
 
 
 @step
@@ -41,17 +44,17 @@ def prepare_dataloaders(train_test: dict,
 
 
 @pipeline
-def data_pipeline(load, preprocess, split, prepare_dataloaders):
+def training_data_pipeline(load, preprocess, split, prepare_dataloaders):
     tweets = load()
     preprocessed = preprocess(tweets)
     split_tweets = split(preprocessed)
     prepare_dataloaders(split_tweets)
 
 
-data_pipeline_instance = data_pipeline(
+training_data_pipeline_instance = training_data_pipeline(
     load=load(),
     preprocess=preprocess(),
     split=split(),
     prepare_dataloaders=prepare_dataloaders())
 
-data_pipeline_instance.run()
+training_data_pipeline_instance.run()
