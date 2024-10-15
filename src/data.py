@@ -12,18 +12,16 @@ label_column = "label"
 text_column = "text"
 has_source_column = "has_source"
 
-sentiments = {
-    0: "Negative",
-    1: "Neutral",
-    2: "Positive"
-    }
+sentiments = {0: "Negative", 1: "Neutral", 2: "Positive"}
 
 
-def make_dataframe_with_dummy_label(tweet:str) -> pd.DataFrame:
+def make_dataframe_with_dummy_label(tweet: str) -> pd.DataFrame:
     return pd.DataFrame({text_column: [tweet], label_column: [0]})
 
-def get_tokenizer(tokenizer_name:str='bert-base-uncased') -> AutoTokenizer:
+
+def get_tokenizer(tokenizer_name: str = 'bert-base-uncased') -> AutoTokenizer:
     return AutoTokenizer.from_pretrained(tokenizer_name)
+
 
 def load_data() -> pd.DataFrame:
     return pd.read_csv(data_path)
@@ -45,7 +43,12 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
 class FinancialTweetsDataset(Dataset):
 
-    def __init__(self, texts, has_source, labels, tokenizer=get_tokenizer(), max_length=100):
+    def __init__(self,
+                 texts,
+                 has_source,
+                 labels,
+                 tokenizer=get_tokenizer(),
+                 max_length=100):
         self.texts = texts
         self.has_source = has_source
         self.labels = labels
@@ -103,10 +106,12 @@ def get_loader(data,
     has_source = data[has_source_column].tolist()
     labels = data[label_column].tolist()
 
-    dataset = FinancialTweetsDataset(texts, has_source, labels, tokenizer=get_tokenizer(tokenizer_name))
+    dataset = FinancialTweetsDataset(texts,
+                                     has_source,
+                                     labels,
+                                     tokenizer=get_tokenizer(tokenizer_name))
 
     dataloader = DataLoader(dataset=dataset,
                             batch_size=batch_size,
                             shuffle=(not is_validation))
     return dataloader
-
