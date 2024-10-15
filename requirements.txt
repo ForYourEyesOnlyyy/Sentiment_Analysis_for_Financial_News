@@ -105,7 +105,7 @@ namex==0.0.8
 nest-asyncio==1.6.0
 networkx==3.3
 nltk==3.9.1
-numpy==2.1.1
+numpy==1.26.4
 omegaconf==2.3.0
 opt-einsum==3.3.0
 optree==0.12.1
