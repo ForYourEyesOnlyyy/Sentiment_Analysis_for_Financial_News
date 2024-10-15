@@ -1,4 +1,4 @@
-import data 
+import data
 from zenml.steps import step
 from zenml.pipelines import pipeline
 import pandas as pd
