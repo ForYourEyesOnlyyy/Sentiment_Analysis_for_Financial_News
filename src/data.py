@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config')
+import config
 import re
 import pandas as pd
 
@@ -7,12 +10,14 @@ from transformers import AutoTokenizer
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-data_path = "data/processed/twitter-financial-news-sentiment/samples/sample1.csv"
-label_column = "label"
-text_column = "text"
-has_source_column = "has_source"
+sys.path.append('/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config')
 
-sentiments = {0: "Negative", 1: "Neutral", 2: "Positive"}
+data_path = config.data_path
+label_column = config.label_column
+text_column = config.text_column
+has_source_column = config.has_source_column
+
+sentiments = config.sentiments
 
 
 def make_dataframe_with_dummy_label(tweet: str) -> pd.DataFrame:
