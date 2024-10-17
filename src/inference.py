@@ -4,8 +4,11 @@ from mlflow.tracking import MlflowClient
 import torch
 
 from time import time
-
 import data
+
+import sys
+sys.path.append('/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config')
+import config
 
 client = MlflowClient()
 
@@ -59,6 +62,11 @@ def run_inference(tweet: str, tokenizer: any, max_length: int, model: any,
         tweet_df[data.label_column], tokenizer, max_length)
     return predict(model, tweet_dataset, device)
 
+def predict_sentiment(tweet: str, tokenizer: any, model:any) -> str:
+    max_length = config.max_length
+    device = config.device
+    return run_inference(tweet, tokenizer, max_length, model, device)
+    
 
 # EXAMPLE USAGE
 if __name__ == "__main__":
@@ -66,8 +74,5 @@ if __name__ == "__main__":
     tokenizer = data.get_tokenizer('bert-base-uncased')
     start = time()
     test_tweet = "$ANCUF: BMO Capital Markets ups to Outperform"
-    max_length = 100
-    model_name = 'simple_sentiment_analysis_model'
-    device = 'cpu'
-    print(run_inference(test_tweet, tokenizer, max_length, model, device))
+    print(predict_sentiment(test_tweet, tokenizer, model))
     print('Inference time:', time() - start)

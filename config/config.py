@@ -13,3 +13,4 @@ max_length = 100
 # MODELS
 tokenizer_name = 'bert-base-uncased'
 model_name = 'simple_sentiment_analysis_model'
+device = 'cpu'
