@@ -8,9 +8,12 @@ sys.path.append(
     "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/src"
 )
 
-sys.path.append("/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config")
+sys.path.append(
+    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config"
+)
 
 import config
+
 
 class TrainingPipelineParams(BaseParameters):
     batch_size: int
@@ -34,7 +37,8 @@ def split(params: TrainingPipelineParams, df: pd.DataFrame) -> dict:
 
 
 @step
-def prepare_dataloaders(params: TrainingPipelineParams, train_test: dict) -> dict:
+def prepare_dataloaders(params: TrainingPipelineParams,
+                        train_test: dict) -> dict:
     train = train_test['train']
     test = train_test['test']
     tokenizer = data.get_tokenizer(params.tokenizer_name)
@@ -64,8 +68,7 @@ if __name__ == "__main__":
     pipeline_params = TrainingPipelineParams(
         batch_size=config.batch_size,
         tokenizer_name=config.tokenizer_name,
-        split_ratio=config.split_ratio
-    )
+        split_ratio=config.split_ratio)
 
     load_instance = load()
     preprocess_instance = preprocess()
@@ -76,7 +79,6 @@ if __name__ == "__main__":
         load=load_instance,
         preprocess=preprocess_instance,
         split=split_instance,
-        prepare_dataloaders=prepare_dataloaders_instance
-    )
+        prepare_dataloaders=prepare_dataloaders_instance)
 
     training_data_pipeline_instance.run()

@@ -7,7 +7,10 @@ from time import time
 import data
 
 import sys
-sys.path.append('/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config')
+
+sys.path.append(
+    '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
+)
 import config
 
 client = MlflowClient()
@@ -62,11 +65,12 @@ def run_inference(tweet: str, tokenizer: any, max_length: int, model: any,
         tweet_df[data.label_column], tokenizer, max_length)
     return predict(model, tweet_dataset, device)
 
-def predict_sentiment(tweet: str, tokenizer: any, model:any) -> str:
+
+def predict_sentiment(tweet: str, tokenizer: any, model: any) -> str:
     max_length = config.max_length
     device = config.device
     return run_inference(tweet, tokenizer, max_length, model, device)
-    
+
 
 # EXAMPLE USAGE
 if __name__ == "__main__":

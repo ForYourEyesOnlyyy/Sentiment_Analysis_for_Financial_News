@@ -1,5 +1,8 @@
 import sys
-sys.path.append('/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config')
+
+sys.path.append(
+    '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
+)
 import config
 import re
 import pandas as pd
@@ -10,7 +13,9 @@ from transformers import AutoTokenizer
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-sys.path.append('/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config')
+sys.path.append(
+    '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
+)
 
 data_path = config.data_path
 label_column = config.label_column
@@ -103,10 +108,7 @@ def split(data, ratio=0.33):
     }
 
 
-def get_loader(data,
-               batch_size=32,
-               is_validation=False,
-               tokenizer=any):
+def get_loader(data, batch_size=32, is_validation=False, tokenizer=any):
     texts = data[text_column].tolist()
     has_source = data[has_source_column].tolist()
     labels = data[label_column].tolist()
