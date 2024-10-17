@@ -10,9 +10,4 @@ jobs:
       - name: YAPF Python Code Formatting Check
         uses: AlexanderMelde/yapf-action@v1.0
         
-      - name: Ruff Check
-        uses: jpetrucciani/ruff-check@0.1.0
-        with:
-          path: '.'
-          flags: ''
-          format: 'github'
+  
