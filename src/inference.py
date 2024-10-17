@@ -1,12 +1,12 @@
+import data
+
+import sys
+from time import time
+
 import mlflow
 from mlflow.tracking import MlflowClient
 
 import torch
-
-from time import time
-import data
-
-import sys
 
 sys.path.append(
     '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
