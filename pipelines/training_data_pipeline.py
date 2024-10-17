@@ -1,5 +1,5 @@
 import data
-from zenml.steps import step
+from zenml.steps import step, BaseParameters
 from zenml.pipelines import pipeline
 import pandas as pd
 import sys
@@ -7,6 +7,15 @@ import sys
 sys.path.append(
     "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/src"
 )
+
+sys.path.append("/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config")
+
+import config
+
+class TrainingPipelineParams(BaseParameters):
+    batch_size: int
+    tokenizer_name: str
+    split_ratio: float
 
 
 @step
@@ -20,25 +29,23 @@ def preprocess(df: pd.DataFrame) -> pd.DataFrame:
 
 
 @step
-def split(df: pd.DataFrame, ratio: float = 0.33) -> dict:
-    return data.split(df, ratio=ratio)
+def split(params: TrainingPipelineParams, df: pd.DataFrame) -> dict:
+    return data.split(df, ratio=params.split_ratio)
 
 
 @step
-def prepare_dataloaders(train_test: dict,
-                        batch_size: int = 32,
-                        tokenizer: str = 'bert-base-uncased') -> dict:
+def prepare_dataloaders(params: TrainingPipelineParams, train_test: dict) -> dict:
     train = train_test['train']
     test = train_test['test']
-
+    tokenizer = data.get_tokenizer(params.tokenizer_name)
     train_loader = data.get_loader(train,
-                                   batch_size=batch_size,
+                                   batch_size=params.batch_size,
                                    is_validation=False,
-                                   tokenizer_name=tokenizer)
+                                   tokenizer=tokenizer)
     val_loader = data.get_loader(test,
-                                 batch_size=batch_size,
+                                 batch_size=params.batch_size,
                                  is_validation=True,
-                                 tokenizer_name=tokenizer)
+                                 tokenizer=tokenizer)
 
     return {'train': train_loader, 'validation': val_loader}
 
@@ -51,10 +58,25 @@ def training_data_pipeline(load, preprocess, split, prepare_dataloaders):
     prepare_dataloaders(split_tweets)
 
 
-training_data_pipeline_instance = training_data_pipeline(
-    load=load(),
-    preprocess=preprocess(),
-    split=split(),
-    prepare_dataloaders=prepare_dataloaders())
+# EXAMPLE USAGE
+if __name__ == "__main__":
 
-training_data_pipeline_instance.run()
+    pipeline_params = TrainingPipelineParams(
+        batch_size=config.batch_size,
+        tokenizer_name=config.tokenizer_name,
+        split_ratio=config.split_ratio
+    )
+
+    load_instance = load()
+    preprocess_instance = preprocess()
+    split_instance = split(params=pipeline_params)
+    prepare_dataloaders_instance = prepare_dataloaders(params=pipeline_params)
+
+    training_data_pipeline_instance = training_data_pipeline(
+        load=load_instance,
+        preprocess=preprocess_instance,
+        split=split_instance,
+        prepare_dataloaders=prepare_dataloaders_instance
+    )
+
+    training_data_pipeline_instance.run()

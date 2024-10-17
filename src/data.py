@@ -106,7 +106,7 @@ def split(data, ratio=0.33):
 def get_loader(data,
                batch_size=32,
                is_validation=False,
-               tokenizer_name='bert-base-uncased'):
+               tokenizer=any):
     texts = data[text_column].tolist()
     has_source = data[has_source_column].tolist()
     labels = data[label_column].tolist()
@@ -114,7 +114,7 @@ def get_loader(data,
     dataset = FinancialTweetsDataset(texts,
                                      has_source,
                                      labels,
-                                     tokenizer=get_tokenizer(tokenizer_name))
+                                     tokenizer=tokenizer)
 
     dataloader = DataLoader(dataset=dataset,
                             batch_size=batch_size,
