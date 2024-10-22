@@ -21,7 +21,6 @@ import config
 import data
 import inference
 
-
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 

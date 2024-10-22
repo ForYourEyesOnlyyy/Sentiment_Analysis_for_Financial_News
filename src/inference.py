@@ -14,7 +14,6 @@ config_path = os.path.join(get_project_root(), 'config')
 sys.path.append(config_path)
 import config
 
-
 client = MlflowClient()
 
 
