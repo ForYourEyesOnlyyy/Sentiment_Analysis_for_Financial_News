@@ -1,21 +1,19 @@
+import os
 import sys
-
-sys.path.append(
-    '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
-)
-import config
 import re
+
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
-
-from transformers import AutoTokenizer
 import torch
 from torch.utils.data import Dataset, DataLoader
+from transformers import AutoTokenizer
 
-sys.path.append(
-    '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
-)
+from utils import get_project_root
+
+# Adding config path and importing config
+config_path = os.path.join(get_project_root(), 'config')
+sys.path.append(config_path)
+import config
 
 data_path = config.data_path
 label_column = config.label_column
