@@ -1,6 +1,6 @@
-import streamlit as st
 import requests
 
+import streamlit as st
 # Set up Streamlit app title
 st.title("Tweet Sentiment Analysis")
 

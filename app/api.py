@@ -1,25 +1,26 @@
-import time
-import sys
-import os
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
 import logging
-import mlflow
-from mlflow.tracking import MlflowClient
+import os
+import sys
+import time
 from contextlib import asynccontextmanager
 
-# Adding required directories to sys.path
-sys.path.append(
-    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/src"
-)
-sys.path.append(
-    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config"
-)
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+import mlflow
+from mlflow.tracking import MlflowClient
 
-# Importing custom modules
-import inference
-import data
+from utils import get_project_root
+
+# Adding config and src paths
+config_path = os.path.join(get_project_root(), 'config')
+src_path = os.path.join(get_project_root(), 'src')
+sys.path.append(config_path)
+sys.path.append(src_path)
+
 import config
+import data
+import inference
+
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
