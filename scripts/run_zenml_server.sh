@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set environment variable for macOS fork safety
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY='YES'
+
 # Default values
 PORT=""
 
@@ -20,10 +23,10 @@ done
 # Check if a custom port was provided
 if [ -z "$PORT" ]; then
     # No port provided, run on the default port
-    echo "Starting MLflow UI on the default port (5000)..."
-    mlflow ui
+    echo "Starting ZenML server on the default port..."
+    zenml up
 else
     # Custom port provided, use it
-    echo "Starting MLflow UI on custom port $PORT..."
-    mlflow ui --port "$PORT"
+    echo "Starting ZenML server on custom port $PORT..."
+    zenml up --port "$PORT"
 fi

@@ -1,25 +1,25 @@
-import time
-import sys
+import logging
 import os
+import sys
+import time
+import shutil
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import logging
 import mlflow
 from mlflow.tracking import MlflowClient
-from contextlib import asynccontextmanager
 
-# Adding required directories to sys.path
-sys.path.append(
-    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/src"
-)
-sys.path.append(
-    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config"
-)
+from utils import get_project_root
 
-# Importing custom modules
-import inference
-import data
+# Adding config and src paths
+config_path = os.path.join(get_project_root(), 'config')
+src_path = os.path.join(get_project_root(), 'src')
+sys.path.append(config_path)
+sys.path.append(src_path)
+
 import config
+import data
+import inference
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -35,19 +35,51 @@ class TweetInput(BaseModel):
 
 
 # Global variables
-client = MlflowClient()
 model = None
 tokenizer = None
+
+
+# Copy the mlruns directory from the project root to the app/mlruns directory
+def copy_mlruns():
+    src_dir = os.path.join(get_project_root(), 'mlruns')
+    dest_dir = os.path.join(get_project_root(), 'app', 'mlruns')
+
+    # Ensure the destination directory exists
+    os.makedirs(dest_dir, exist_ok=True)
+
+    # Copy contents from source to destination
+    try:
+        # shutil.copytree can't be used here because it requires dest to not exist,
+        # so we copy contents manually using copy2
+        for item in os.listdir(src_dir):
+            src_item = os.path.join(src_dir, item)
+            dest_item = os.path.join(dest_dir, item)
+
+            if os.path.isdir(src_item):
+                # Recursively copy directories
+                shutil.copytree(src_item, dest_item, dirs_exist_ok=True)
+            else:
+                # Copy files
+                shutil.copy2(src_item, dest_item)
+
+        logging.info(
+            f"Successfully copied mlruns from {src_dir} to {dest_dir}.")
+    except Exception as e:
+        logging.error(f"Failed to copy mlruns: {e}")
 
 
 # Lifespan function for managing startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global model, tokenizer
-    # Startup logic: Load model and tokenizer
-    project_root = os.path.abspath(os.path.join(os.getcwd(), "../"))
-    print(project_root)  # Assuming notebook is in the notebooks folder
-    mlflow.set_tracking_uri(f"file://{project_root}/mlruns")
+
+    # Copy mlruns folder at startup
+    copy_mlruns()
+
+    # Set MLflow tracking URI
+    mlflow.set_tracking_uri(os.path.join(get_project_root(), 'app', 'mlruns'))
+
+    # Load model and tokenizer
     model = inference.load_model_from_registry(model_name=config.model_name)
     logging.info(f"Model {config.model_name} loaded successfully at startup.")
     tokenizer = data.get_tokenizer(config.tokenizer_name)

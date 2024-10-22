@@ -1,18 +1,21 @@
-import data
-from zenml.steps import step, BaseParameters
-from zenml.pipelines import pipeline
-import pandas as pd
+import os
 import sys
 
-sys.path.append(
-    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/src"
-)
+import pandas as pd
+from zenml.pipelines import pipeline
+from zenml.steps import step, BaseParameters
 
-sys.path.append(
-    "/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config"
-)
+# my modules imports
+from utils import get_project_root
+
+# Adding config path and importing config and src
+config_path = os.path.join(get_project_root(), 'config')
+src_path = os.path.join(get_project_root(), 'src')
+sys.path.append(config_path)
+sys.path.append(src_path)
 
 import config
+import data
 
 
 class TrainingPipelineParams(BaseParameters):

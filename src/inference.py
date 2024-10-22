@@ -1,16 +1,17 @@
-import data
-
+import os
 import sys
 from time import time
 
 import mlflow
 from mlflow.tracking import MlflowClient
-
 import torch
 
-sys.path.append(
-    '/Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/config'
-)
+import data
+from utils import get_project_root
+
+# Adding config path and importing config
+config_path = os.path.join(get_project_root(), 'config')
+sys.path.append(config_path)
 import config
 
 client = MlflowClient()
