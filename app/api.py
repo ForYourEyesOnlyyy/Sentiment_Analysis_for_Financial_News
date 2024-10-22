@@ -24,19 +24,20 @@ import inference
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 
+
 # Define Pydantic model for input validation
 class TweetInput(BaseModel):
     tweet: str = Field(
         ...,
         min_length=1,
         max_length=280,
-        description="The content of the tweet (1-280 characters)"
-    )
+        description="The content of the tweet (1-280 characters)")
 
 
 # Global variables
 model = None
 tokenizer = None
+
 
 # Copy the mlruns directory from the project root to the app/mlruns directory
 def copy_mlruns():
@@ -48,20 +49,21 @@ def copy_mlruns():
 
     # Copy contents from source to destination
     try:
-        # shutil.copytree can't be used here because it requires dest to not exist, 
+        # shutil.copytree can't be used here because it requires dest to not exist,
         # so we copy contents manually using copy2
         for item in os.listdir(src_dir):
             src_item = os.path.join(src_dir, item)
             dest_item = os.path.join(dest_dir, item)
-            
+
             if os.path.isdir(src_item):
                 # Recursively copy directories
                 shutil.copytree(src_item, dest_item, dirs_exist_ok=True)
             else:
                 # Copy files
                 shutil.copy2(src_item, dest_item)
-        
-        logging.info(f"Successfully copied mlruns from {src_dir} to {dest_dir}.")
+
+        logging.info(
+            f"Successfully copied mlruns from {src_dir} to {dest_dir}.")
     except Exception as e:
         logging.error(f"Failed to copy mlruns: {e}")
 
@@ -81,7 +83,8 @@ async def lifespan(app: FastAPI):
     model = inference.load_model_from_registry(model_name=config.model_name)
     logging.info(f"Model {config.model_name} loaded successfully at startup.")
     tokenizer = data.get_tokenizer(config.tokenizer_name)
-    logging.info(f"Tokenizer {config.tokenizer_name} loaded successfully at startup.")
+    logging.info(
+        f"Tokenizer {config.tokenizer_name} loaded successfully at startup.")
 
     # Yield to allow the app to run
     yield
@@ -104,7 +107,8 @@ async def predict(tweet_input: TweetInput):
     logging.info(f"Received tweet for sentiment analysis: {tweet_input.tweet}")
 
     # Call the prediction function (includes internal preprocessing)
-    sentiment = inference.predict_sentiment(tweet_input.tweet, tokenizer, model)
+    sentiment = inference.predict_sentiment(tweet_input.tweet, tokenizer,
+                                            model)
 
     # Calculate request processing duration
     processing_time = time.time() - start_time
