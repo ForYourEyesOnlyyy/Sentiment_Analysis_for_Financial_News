@@ -1,7 +1,17 @@
-from zenml.client import Client
+import os
+import sys
 import warnings
 
+from zenml.client import Client
+
+from utils import get_project_root
+
+# Suppress future warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
+
+# Ensure config is accessible
+config_path = os.path.join(get_project_root(), 'config')
+sys.path.append(config_path)
 
 
 def extract_latest_loaders() -> dict:

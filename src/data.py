@@ -1,6 +1,7 @@
 import os
 import sys
 import re
+import warnings
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -14,6 +15,8 @@ from utils import get_project_root
 config_path = os.path.join(get_project_root(), 'config')
 sys.path.append(config_path)
 import config
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 data_path = config.data_path
 label_column = config.label_column
