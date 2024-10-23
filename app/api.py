@@ -30,6 +30,7 @@ class TweetInput(BaseModel):
 model = None
 tokenizer = None
 
+
 # Lifespan function for managing startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):

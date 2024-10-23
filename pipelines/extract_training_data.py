@@ -4,6 +4,7 @@ import warnings
 
 from zenml.client import Client
 
+
 def extract_latest_loaders() -> dict:
     # Extract the latest loaders
     client = Client()
