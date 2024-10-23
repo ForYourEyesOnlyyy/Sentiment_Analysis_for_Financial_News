@@ -9,14 +9,6 @@ from pydantic import BaseModel, Field
 import mlflow
 from mlflow.tracking import MlflowClient
 
-from app.app_utils import get_project_root
-
-# Adding config and src paths
-config_path = os.path.join(get_project_root(), 'config')
-src_path = os.path.join(get_project_root(), 'src')
-sys.path.append(config_path)
-sys.path.append(src_path)
-
 from config import config
 from src import data
 from src import inference
@@ -38,43 +30,10 @@ class TweetInput(BaseModel):
 model = None
 tokenizer = None
 
-
-# Copy the mlruns directory from the project root to the app/mlruns directory
-def copy_mlruns():
-    src_dir = os.path.join(os.getcwd(), 'mlruns')
-    dest_dir = os.path.join(os.getcwd(), 'app', 'mlruns')
-
-    # Ensure the destination directory exists
-    os.makedirs(dest_dir, exist_ok=True)
-
-    # Copy contents from source to destination
-    try:
-        # shutil.copytree can't be used here because it requires dest to not exist,
-        # so we copy contents manually using copy2
-        for item in os.listdir(src_dir):
-            src_item = os.path.join(src_dir, item)
-            dest_item = os.path.join(dest_dir, item)
-
-            if os.path.isdir(src_item):
-                # Recursively copy directories
-                shutil.copytree(src_item, dest_item, dirs_exist_ok=True)
-            else:
-                # Copy files
-                shutil.copy2(src_item, dest_item)
-
-        logging.info(
-            f"Successfully copied mlruns from {src_dir} to {dest_dir}.")
-    except Exception as e:
-        logging.error(f"Failed to copy mlruns: {e}")
-
-
 # Lifespan function for managing startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global model, tokenizer
-
-    # Copy mlruns folder at startup
-    copy_mlruns()
 
     # Set MLflow tracking URI
     mlflow.set_tracking_uri(os.path.join(os.getcwd(), 'mlruns'))

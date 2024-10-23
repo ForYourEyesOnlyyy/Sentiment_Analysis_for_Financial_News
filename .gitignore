@@ -166,5 +166,5 @@ data/dvc/sample.csv
 .dvc/config
 services/
 mlruns/
-notebooks/.zen
+notebooks/.zen/
 .zen/
