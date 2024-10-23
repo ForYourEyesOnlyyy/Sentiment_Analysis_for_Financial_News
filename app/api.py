@@ -37,11 +37,17 @@ async def lifespan(app: FastAPI):
     global model, tokenizer
 
     # Set MLflow tracking URI
-    mlflow.set_tracking_uri(os.path.join(os.getcwd(), 'mlruns'))
+    # mlflow.set_tracking_uri(os.path.join(os.getcwd(), 'mlruns'))
 
     # Load model and tokenizer
-    model = inference.load_model_from_registry(model_name=config.model_name)
+    # model = inference.load_model_from_registry(model_name=config.model_name)
+
+    import torch
+    from models.ssam.simple_sentiment_analysis_model import SentimentAnalysisModel
+    model = SentimentAnalysisModel()
+    model.load_state_dict(torch.load('models/ssam/model_weights.pth'))
     logging.info(f"Model {config.model_name} loaded successfully at startup.")
+
     tokenizer = data.get_tokenizer(config.tokenizer_name)
     logging.info(
         f"Tokenizer {config.tokenizer_name} loaded successfully at startup.")
