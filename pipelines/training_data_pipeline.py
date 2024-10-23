@@ -5,17 +5,8 @@ import pandas as pd
 from zenml.pipelines import pipeline
 from zenml.steps import step, BaseParameters
 
-# my modules imports
-from utils import get_project_root
-
-# Adding config path and importing config and src
-config_path = os.path.join(get_project_root(), 'config')
-src_path = os.path.join(get_project_root(), 'src')
-sys.path.append(config_path)
-sys.path.append(src_path)
-
-import config
-import data
+from config import config
+from src import data
 
 
 class TrainingPipelineParams(BaseParameters):

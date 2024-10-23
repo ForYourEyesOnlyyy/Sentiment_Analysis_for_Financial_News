@@ -9,12 +9,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from transformers import AutoTokenizer
 
-from utils import get_project_root
-
-# Adding config path and importing config
-config_path = os.path.join(get_project_root(), 'config')
-sys.path.append(config_path)
-import config
+from config import config
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 

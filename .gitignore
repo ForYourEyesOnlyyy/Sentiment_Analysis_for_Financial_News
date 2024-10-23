@@ -165,3 +165,6 @@ datastore
 data/dvc/sample.csv
 .dvc/config
 services/
+mlruns/
+notebooks/.zen
+.zen/

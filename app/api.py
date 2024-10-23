@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 import mlflow
 from mlflow.tracking import MlflowClient
 
-from utils import get_project_root
+from app.app_utils import get_project_root
 
 # Adding config and src paths
 config_path = os.path.join(get_project_root(), 'config')
@@ -17,9 +17,9 @@ src_path = os.path.join(get_project_root(), 'src')
 sys.path.append(config_path)
 sys.path.append(src_path)
 
-import config
-import data
-import inference
+from config import config
+from src import data
+from src import inference
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -41,8 +41,8 @@ tokenizer = None
 
 # Copy the mlruns directory from the project root to the app/mlruns directory
 def copy_mlruns():
-    src_dir = os.path.join(get_project_root(), 'mlruns')
-    dest_dir = os.path.join(get_project_root(), 'app', 'mlruns')
+    src_dir = os.path.join(os.getcwd(), 'mlruns')
+    dest_dir = os.path.join(os.getcwd(), 'app', 'mlruns')
 
     # Ensure the destination directory exists
     os.makedirs(dest_dir, exist_ok=True)
@@ -77,7 +77,7 @@ async def lifespan(app: FastAPI):
     copy_mlruns()
 
     # Set MLflow tracking URI
-    mlflow.set_tracking_uri(os.path.join(get_project_root(), 'app', 'mlruns'))
+    mlflow.set_tracking_uri(os.path.join(os.getcwd(), 'mlruns'))
 
     # Load model and tokenizer
     model = inference.load_model_from_registry(model_name=config.model_name)

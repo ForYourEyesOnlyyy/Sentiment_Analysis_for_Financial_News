@@ -34,9 +34,10 @@ else
         -a sentiment_analysis_artifact_store \
         -o sentiment_analysis_orchestrator
 
-    # Set the stack as active
-    zenml stack set "$STACK_NAME"
 fi
+
+# Set the stack as active
+zenml stack set "$STACK_NAME"
 
 # Describe the active stack
 zenml stack describe

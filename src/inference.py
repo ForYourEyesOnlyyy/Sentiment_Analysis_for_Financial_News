@@ -6,13 +6,13 @@ import mlflow
 from mlflow.tracking import MlflowClient
 import torch
 
-import data
-from utils import get_project_root
+from src import data
+from src.src_utils import get_project_root
 
 # Adding config path and importing config
 config_path = os.path.join(get_project_root(), 'config')
 sys.path.append(config_path)
-import config
+from config import config
 
 client = MlflowClient()
 

@@ -1,6 +1,6 @@
-artifact_location: file:///Users/maxmartyshov/Desktop/IU/year3/PMDL/Sentiment_Analysis_for_Financial_News/mlruns/0
-creation_time: 1728645122492
+artifact_location: file:///home/roma/5sem/Sentiment_Analysis_for_Financial_News/mlruns/0
+creation_time: 1729677764961
 experiment_id: '0'
-last_update_time: 1728645122492
+last_update_time: 1729677764961
 lifecycle_stage: active
 name: Default
