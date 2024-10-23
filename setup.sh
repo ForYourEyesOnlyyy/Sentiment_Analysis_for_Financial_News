@@ -17,7 +17,7 @@ setup_pythonpath() {
             SHELL_CONFIG="$HOME/.zshrc"
             echo "$PYTHONPATH_EXPORT" >> "$SHELL_CONFIG"
             echo "PYTHONPATH added to .zshrc"
-            zsh -c "source $SHELL_CONFIG"
+            source $SHELL_CONFIG
             ;;
         MINGW*|MSYS*|CYGWIN*)
             # Windows systems (via Git Bash or WSL, write to .bashrc)
