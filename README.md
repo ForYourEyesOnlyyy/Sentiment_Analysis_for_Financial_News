@@ -255,7 +255,3 @@ The MLflow Model Registry manages model version control and provides a seamless 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ---
-
-Here’s an updated README section with the additional details for extracting data loaders from the latest pipeline run:
-
----
