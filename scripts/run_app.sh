@@ -7,8 +7,8 @@ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY='YES'
 STREAMLIT_PORT="8501"
 
 # Define the paths to your FastAPI and Streamlit app files
-FASTAPI_APP="deployment.api.api:app"  # FastAPI app is in the 'app' folder, so we use 'app.api:app'
-STREAMLIT_APP="deployment/app/app.py"  # Streamlit app is in the 'app' folder
+FASTAPI_APP="deployment.api:app"  # FastAPI app is in the 'app' folder, so we use 'app.api:app'
+STREAMLIT_APP="deployment/app.py"  # Streamlit app is in the 'app' folder
 
 # # Navigate to the project root (assuming this script is executed from the 'scripts' folder)
 # cd "$(dirname "$0")/.." || exit 1
