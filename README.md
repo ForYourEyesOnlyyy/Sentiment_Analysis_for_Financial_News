@@ -69,6 +69,57 @@ Sentiment-Analysis-for-Financial-News/
 - **Docker Integration**: Dockerfiles for FastAPI and Streamlit, with Docker Compose for managing both.
 - **Automated Setup and Shutdown**: Includes scripts to set up the environment and shut down services.
 
+## Setup Instructions
+
+### Prerequisites
+
+- **Python** 3.11+
+- **Docker** (for deployment)
+- **pip** (Python package installer)
+
+### Installation
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/ForYourEyesOnlyyy/Sentiment_Analysis_for_Financial_News.git
+    cd Sentiment-Analysis-for-Financial-News
+    ```
+
+2. **Create a Virtual Environment**:
+    - Create an empty virtual environment with Python 3.11+:
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
+
+3. **Set Up the Project**:
+    - Run the setup script to install requirements, create the ZenML stack, and set it as current:
+    ```bash
+    bash setup.sh
+    ```
+
+4. **Run MLflow UI** (Optional):
+    - To launch the MLflow UI for tracking experiments, run:
+    ```bash
+    bash scripts/mlflow_ui.sh
+    ```
+5. **Shutdown**:
+    - Once done with the project, run the following command to stop all background processes (such as the ZenML server):
+    ```bash
+    bash shutdown.sh
+    ```
+
+After completing these steps, you're ready to start using or contributing to the project.
+
+### Running the Web App
+
+To launch the web app (FastAPI backend and Streamlit UI), follow these steps:
+1. Run the setup script as described above.
+2. Run the following command to start the app:
+    ```bash
+    bash run.sh
+    ```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
