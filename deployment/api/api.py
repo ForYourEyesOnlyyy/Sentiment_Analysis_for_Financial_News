@@ -1,13 +1,9 @@
 import logging
-import os
-import sys
 import time
-import shutil
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import mlflow
-from mlflow.tracking import MlflowClient
 
 from config import config
 from src import data
