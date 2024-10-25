@@ -41,7 +41,9 @@ async def lifespan(app: FastAPI):
     import torch
     from models.ssam.simple_sentiment_analysis_model import SentimentAnalysisModel
     model = SentimentAnalysisModel()
-    model.load_state_dict(torch.load('models/ssam/model_weights.pth', map_location=config.device))
+    model.load_state_dict(
+        torch.load('models/ssam/model_weights.pth',
+                   map_location=config.device))
     logging.info(f"Model {config.model_name} loaded successfully at startup.")
 
     tokenizer = data.get_tokenizer(config.tokenizer_name)
