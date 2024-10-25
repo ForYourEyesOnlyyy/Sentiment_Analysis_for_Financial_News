@@ -10,6 +10,7 @@ This project leverages a machine learning-based solution to classify the sentime
 - [Setup Instructions](#setup-instructions)
 - [Data Processing and Pipelines](#data-processing-and-pipelines)
 - [Model Training and Evaluation](#model-training-and-evaluation)
+- [Web App & Deployment](#web-app--deployment)
 - [License](#license)
 
 ---
@@ -122,9 +123,6 @@ To launch the web app (FastAPI backend and Streamlit UI), follow these steps:
     bash run.sh
     ```
 
-Here’s an enhanced section for the README detailing the main ZenML data pipeline:
-
----
 
 ## Data Processing and Pipelines
 
@@ -250,6 +248,44 @@ with mlflow.start_run():
 ### MLflow Model Registry
 
 The MLflow Model Registry manages model version control and provides a seamless way to select the best-performing model as the "Champion." This approach simplifies model comparison and access, ensuring that only the highest-performing version is used for production or deployment tasks. The registry’s alias feature allows easy access to the Champion model, reducing overhead when working with multiple model architectures and versions.
+
+## Web App & Deployment
+
+The project includes a web application with both a REST API (powered by FastAPI) and a user-friendly UI (built with Streamlit) for sentiment analysis of financial news or tweets. The entire application is containerized and managed with Docker, enabling streamlined deployment and efficient resource management.
+
+### REST API with FastAPI
+
+- **FastAPI** is used to create a REST API endpoint that accepts a string input (e.g., a tweet or news excerpt) and returns its sentiment. Upon receiving a request:
+  - The API performs **model inference** to classify the sentiment as positive, neutral, or negative.
+  - **Inference time** is also calculated and returned with the result to provide insight into the model’s performance in real-time applications.
+
+### User Interface with Streamlit
+
+- **Streamlit** serves as a front-end interface for users to interact with the model. Users can input text and receive sentiment analysis results directly, making the model accessible without needing programming knowledge or API integration.
+
+### Docker & Deployment Setup
+
+The project is containerized with Docker for consistent and lightweight deployment. The Docker setup includes:
+
+1. **Dockerfiles**:
+   - **API Dockerfile**: Builds an image for the FastAPI-based backend, allowing it to handle sentiment analysis requests.
+   - **App Dockerfile**: Builds an image for the Streamlit UI, enabling user-friendly interaction with the model.
+
+2. **Docker Compose**:
+   - A `docker-compose.yml` file is used to build and run both the API and UI containers together.
+   - For efficiency and to keep container sizes minimal, a **shared project folder** is mounted in Docker Compose, allowing both containers to access necessary project files without duplicating data.
+   - **Networking**: Docker Compose creates a network that links the API and UI containers, allowing Streamlit to communicate with FastAPI for real-time sentiment analysis.
+
+### Running the Web App
+
+To run the web app and API together, use Docker Compose:
+```bash
+docker-compose -f deployment/docker-compose.yml up --build
+```
+
+This command builds and launches both containers, setting up the FastAPI backend and Streamlit UI to work seamlessly together in a single network. The setup allows the API to process requests from the Streamlit UI efficiently and returns sentiment results and inference times directly to the user. 
+
+This containerized deployment setup ensures that the web app is easily scalable and can be deployed consistently across different environments, supporting efficient and responsive sentiment analysis applications.
 
 ## License
 
