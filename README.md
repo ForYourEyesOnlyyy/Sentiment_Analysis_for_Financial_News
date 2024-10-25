@@ -8,6 +8,7 @@ This project leverages a machine learning-based solution to classify the sentime
 - [Project Structure](#project-structure)
 - [Features](#features)
 - [Setup Instructions](#setup-instructions)
+- [Data Processing and Pipelines](#data-processing-and-pipelines)
 - [License](#license)
 
 ---
@@ -120,8 +121,69 @@ To launch the web app (FastAPI backend and Streamlit UI), follow these steps:
     bash run.sh
     ```
 
+Here’s an enhanced section for the README detailing the main ZenML data pipeline:
+
+---
+
+## Data Processing and Pipelines
+
+Data preprocessing is managed by ZenML, ensuring consistency and ease in data handling across experiments and deployments. The main pipeline, `training_data_pipeline`, performs several key steps to transform raw data into processed data loaders ready for model training. The pipeline is configurable via `TrainingPipelineParams`, allowing for adjustments in batch size, tokenizer, and train-test split ratio.
+
+### Pipeline Steps
+
+1. **Load Data**:
+   - The `load` step loads the raw data using the `data.load_data()` function, returning a DataFrame with financial news articles. This serves as the initial input for subsequent steps.
+
+2. **Preprocess Data**:
+   - In `preprocess`, raw data undergoes various cleaning and preprocessing transformations to prepare the text for tokenization. This may include handling missing values, removing irrelevant symbols, and standardizing text formats.
+
+3. **Split Data**:
+   - The `split` step divides the data into training and testing sets. The split ratio is defined in `TrainingPipelineParams`, ensuring the pipeline can be easily adjusted for different model validation strategies.
+
+4. **Prepare Dataloaders**:
+   - This step, `prepare_dataloaders`, converts the training and testing datasets into data loaders compatible with PyTorch. Using the specified tokenizer from `TrainingPipelineParams`, the data is tokenized and batched. This step returns `train_loader` and `val_loader` dictionaries, ready for use in model training and evaluation.
+
+### Example Pipeline Setup and Execution
+
+```python
+from config import config
+from training_data_pipeline import training_data_pipeline, TrainingPipelineParams
+from src.data import load, preprocess, split, prepare_dataloaders
+
+# Define pipeline parameters
+pipeline_params = TrainingPipelineParams(
+    batch_size=config.batch_size,
+    tokenizer_name=config.tokenizer_name,
+    split_ratio=config.split_ratio)
+
+# Initialize pipeline steps
+load_instance = load()
+preprocess_instance = preprocess()
+split_instance = split(params=pipeline_params)
+prepare_dataloaders_instance = prepare_dataloaders(params=pipeline_params)
+
+# Create and run pipeline instance
+training_data_pipeline_instance = training_data_pipeline(
+    load=load_instance,
+    preprocess=preprocess_instance,
+    split=split_instance,
+    prepare_dataloaders=prepare_dataloaders_instance)
+
+training_data_pipeline_instance.run()
+```
+
+This pipeline simplifies the end-to-end data preparation process, from loading raw data to generating preprocessed data loaders for model training.
+
+### Extracting Dataloaders from the Latest Pipeline Run
+
+The `extract_latest_loaders` function allows you to access the data loaders from the most recent `training_data_pipeline` run. Using ZenML’s client API, it retrieves the output artifacts from the `prepare_dataloaders` step in the latest pipeline execution, providing the latest `train_loader` and `val_loader` directly for immediate use.
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ---
 
+Here’s an updated README section with the additional details for extracting data loaders from the latest pipeline run:
+
+---
