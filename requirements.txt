@@ -226,7 +226,6 @@ websockets==13.1
 Werkzeug==3.0.4
 wheel==0.44.0
 widgetsnbextension==4.0.13
-wordcloud==1.9.3
 wrapt==1.16.0
 xxhash==3.5.0
 yapf==0.40.2

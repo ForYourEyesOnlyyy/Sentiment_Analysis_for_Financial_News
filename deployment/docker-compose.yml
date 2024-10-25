@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.fastapi
+    environment:
+      - PYTHONPATH=/app  # Set project root as PYTHONPATH
+    volumes:
+      - ../:/app  # Mount the project root directory
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  streamlit:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.streamlit
+    environment:
+      - PYTHONPATH=/app  # Set project root as PYTHONPATH
+      - FASTAPI_URL=http://fastapi:8000  # Connects Streamlit to FastAPI
+    volumes:
+      - ../:/app  # Mount the project root directory
+    ports:
+      - "8501:8501"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

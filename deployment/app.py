@@ -7,8 +7,11 @@ st.title("Tweet Sentiment Analysis")
 # Create an input text box for the tweet
 tweet = st.text_area("Enter the tweet you want to analyze:", "", height=150)
 
-# API endpoint URL (adjust this URL based on where your FastAPI is hosted)
-api_url = "http://127.0.0.1:8000/predict-sentiment/"
+# API endpoint URL FOR DOCKER
+api_url = "http://fastapi:8000/predict-sentiment/"
+
+# API endpoint URL FOR LOCAL
+# api_url = "http://127.0.0.1:8000/predict-sentiment/"
 
 # Create a button to send the request
 if st.button("Predict Sentiment"):

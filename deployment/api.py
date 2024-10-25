@@ -1,13 +1,9 @@
 import logging
-import os
-import sys
 import time
-import shutil
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import mlflow
-from mlflow.tracking import MlflowClient
 
 from config import config
 from src import data
@@ -45,7 +41,9 @@ async def lifespan(app: FastAPI):
     import torch
     from models.ssam.simple_sentiment_analysis_model import SentimentAnalysisModel
     model = SentimentAnalysisModel()
-    model.load_state_dict(torch.load('models/ssam/model_weights.pth'))
+    model.load_state_dict(
+        torch.load('models/ssam/model_weights.pth',
+                   map_location=config.device))
     logging.info(f"Model {config.model_name} loaded successfully at startup.")
 
     tokenizer = data.get_tokenizer(config.tokenizer_name)

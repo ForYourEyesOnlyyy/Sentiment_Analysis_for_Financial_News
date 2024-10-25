@@ -1,0 +1,22 @@
+# Dockerfile for Streamlit
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+# Set working directory
+WORKDIR /app
+
+# Copy the requirements and install dependencies
+COPY deployment/requirements/streamlit-requirements.txt .
+RUN pip install --no-cache-dir -r streamlit-requirements.txt
+
+# Copy application code 
+COPY ./deployment/app.py /deployment/app.py
+
+# Expose the port Streamlit will run on
+EXPOSE 8501
+
+# Command to run Streamlit
+CMD ["streamlit", "run", "deployment/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
