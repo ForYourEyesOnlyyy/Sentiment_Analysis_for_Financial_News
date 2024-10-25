@@ -1,18 +1,20 @@
 # Sentiment Analysis for Financial News
 
-This project delivers a machine learning-based solution for sentiment analysis of financial news articles, classifying each as positive, negative, or neutral. Aimed at supporting investors and analysts, the project provides both a REST API and web app deployment via FastAPI, Streamlit, Docker, and ZenML for efficient sentiment analysis in financial contexts.
+This project leverages a machine learning-based solution to classify the sentiment of financial news articles as positive, negative, or neutral, empowering investors and analysts to make data-driven decisions. Built using PyTorch and BERT for NLP, the project also integrates ZenML for streamlined data preprocessing and MLflow for robust experiment tracking and model versioning.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Project Structure](#project-structure)
+- [Features](#features)
+- [Setup Instructions](#setup-instructions)
 - [License](#license)
 
 ---
 
 ## Overview
 
-Financial news sentiment analysis offers critical insights to investors and analysts, and this project facilitates that analysis using NLP and machine learning. The goal is to streamline sentiment classification, enhancing financial decision-making by providing accessible sentiment insights for market events.
+Financial news sentiment analysis offers critical insights to investors and analysts, and this project facilitates that analysis using NLP and machine learning. Key functionalities include tokenization, model training, deployment, experiment tracking with MLflow, and data processing using ZenML pipelines. By using BERT as an NLP model layer and tokenizer, the project captures nuanced sentiment in financial text.
 
 ## Project Structure
 
@@ -57,5 +59,18 @@ Sentiment-Analysis-for-Financial-News/
     └── inference.py          # Code for making predictions with trained models
 ```
 
+## Features
+
+- **Sentiment Classification**: Classifies financial news articles as positive, negative, or neutral.
+- **BERT Integration**: BERT-based tokenization and embedding, integrated as a PyTorch layer for NLP tasks.
+- **MLflow Experiment Tracking**: Automatically logs experiments, saving model architecture and weights to the `models` folder, and enables loading the best-performing "champion" model directly from MLflow.
+- **ZenML Data Pipelines**: Automates data preprocessing with ZenML pipelines for streamlined training and experimentation.
+- **Multiple Deployment Options**: Deployable as a REST API using FastAPI or as a web app using Streamlit.
+- **Docker Integration**: Dockerfiles for FastAPI and Streamlit, with Docker Compose for managing both.
+- **Automated Setup and Shutdown**: Includes scripts to set up the environment and shut down services.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ---
 
