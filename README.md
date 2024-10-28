@@ -1,3 +1,5 @@
+[![Sentiment Analysis Workflow](https://github.com/ForYourEyesOnlyyy/Sentiment_Analysis_for_Financial_News/actions/workflows/autoyapf.yml/badge.svg)](https://github.com/ForYourEyesOnlyyy/Sentiment_Analysis_for_Financial_News/actions/workflows/autoyapf.yml)
+
 # Sentiment Analysis for Financial News
 
 This project leverages a machine learning-based solution to classify the sentiment of financial news tweets as positive, negative, or neutral, empowering investors and analysts to make data-driven decisions. Built using PyTorch and BERT for NLP, the project also integrates ZenML for streamlined data preprocessing and MLflow for robust experiment tracking and model versioning.
