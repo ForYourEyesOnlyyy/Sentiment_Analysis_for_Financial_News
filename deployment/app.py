@@ -1,6 +1,20 @@
-import requests
+"""
+app.py
 
+This Streamlit application provides a user interface for tweet sentiment analysis. 
+Users can enter a tweet in the text area, and upon clicking the "Predict Sentiment" 
+button, the app sends the tweet text to a FastAPI endpoint for sentiment prediction. 
+The result, including the predicted sentiment and processing time, is then displayed 
+to the user.
+
+Attributes:
+    api_url (str): The URL of the FastAPI endpoint for sentiment prediction. 
+                   Defaults to the local API URL; use the Docker URL when deploying in a container.
+"""
+
+import requests
 import streamlit as st
+
 # Set up Streamlit app title
 st.title("Tweet Sentiment Analysis")
 
