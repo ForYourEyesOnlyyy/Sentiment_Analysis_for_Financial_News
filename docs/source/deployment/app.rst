@@ -1,4 +1,4 @@
-app.py Module
+Streamlit App Documentation
 =============
 
 .. automodule:: deployment.app

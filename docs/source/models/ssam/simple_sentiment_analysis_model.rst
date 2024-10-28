@@ -1,7 +1,7 @@
-simple_sentiment_analysis_model.py
+Simple Sentiment Analysis Model
 ==================================
 
-.. automodule:: models.simple_sentiment_analysis_model
+.. automodule:: models.ssam.simple_sentiment_analysis_model
     :members:
     :undoc-members:
     :show-inheritance:

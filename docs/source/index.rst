@@ -12,8 +12,8 @@ Welcome to the codebase documentation for Sentiment Analysis for Financial Tweet
    :maxdepth: 2
    :caption: Contents
 
-   src_reference         # Reference documentation for the src folder
-   models_reference      # Reference documentation for the models folder
-   deployment_reference  # Reference documentation for the deployment folder
+   src
+   models
+   deployment
 
 

@@ -1,4 +1,4 @@
-api.py Module
+API Documentation
 =============
 
 .. automodule:: deployment.api
