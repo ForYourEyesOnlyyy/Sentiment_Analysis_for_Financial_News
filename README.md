@@ -1,6 +1,6 @@
 # Sentiment Analysis for Financial News
 
-This project leverages a machine learning-based solution to classify the sentiment of financial news articles as positive, negative, or neutral, empowering investors and analysts to make data-driven decisions. Built using PyTorch and BERT for NLP, the project also integrates ZenML for streamlined data preprocessing and MLflow for robust experiment tracking and model versioning.
+This project leverages a machine learning-based solution to classify the sentiment of financial news tweets as positive, negative, or neutral, empowering investors and analysts to make data-driven decisions. Built using PyTorch and BERT for NLP, the project also integrates ZenML for streamlined data preprocessing and MLflow for robust experiment tracking and model versioning.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ This project leverages a machine learning-based solution to classify the sentime
 
 ## Overview
 
-Financial news sentiment analysis offers critical insights to investors and analysts, and this project facilitates that analysis using NLP and machine learning. Key functionalities include tokenization, model training, deployment, experiment tracking with MLflow, and data processing using ZenML pipelines. By using BERT as an NLP model layer and tokenizer, the project captures nuanced sentiment in financial text.
+Financial news sentiment analysis offers critical insights to investors and analysts, and this project facilitates that analysis using NLP and machine learning. Key functionalities include tokenization, model training, deployment, experiment tracking with MLflow, and data processing using ZenML pipelines. By using BERT as an NLP model layer and tokenizer, the project captures nuanced sentiment in financial tweets.
 
 ## Project Structure
 
@@ -66,7 +66,7 @@ Sentiment-Analysis-for-Financial-News/
 
 ## Features
 
-- **Sentiment Classification**: Classifies financial news articles as positive, negative, or neutral.
+- **Sentiment Classification**: Classifies financial news tweets as positive, negative, or neutral.
 - **BERT Integration**: BERT-based tokenization and embedding, integrated as a PyTorch layer for NLP tasks.
 - **MLflow Experiment Tracking**: Automatically logs experiments, saving model architecture and weights to the `models` folder, and enables loading the best-performing "champion" model directly from MLflow.
 - **ZenML Data Pipelines**: Automates data preprocessing with ZenML pipelines for streamlined training and experimentation.
@@ -108,6 +108,7 @@ Sentiment-Analysis-for-Financial-News/
     ```bash
     bash scripts/mlflow_ui.sh
     ```
+
 5. **Shutdown**:
     - Once done with the project, run the following command to stop all background processes (such as the ZenML server):
     ```bash
@@ -115,16 +116,6 @@ Sentiment-Analysis-for-Financial-News/
     ```
 
 After completing these steps, you're ready to start using or contributing to the project.
-
-### Running the Web App
-
-Here's the updated **Web App & Deployment** section with options for running the app via Docker or Bash:
-
----
-
-## Web App & Deployment
-
-The project includes a web application with both a REST API (powered by FastAPI) and a user-friendly UI (built with Streamlit) for sentiment analysis of financial news or tweets. The application can be run either using Docker or directly via Bash commands.
 
 ### Running the Web App
 
@@ -152,7 +143,7 @@ Data preprocessing is managed by ZenML, ensuring consistency and ease in data ha
 ### Pipeline Steps
 
 1. **Load Data**:
-   - The `load` step loads the raw data using the `data.load_data()` function, returning a DataFrame with financial news articles. This serves as the initial input for subsequent steps.
+   - The `load` step loads the raw data using the `data.load_data()` function, returning a DataFrame with financial news tweets. This serves as the initial input for subsequent steps.
 
 2. **Preprocess Data**:
    - In `preprocess`, raw data undergoes various cleaning and preprocessing transformations to prepare the text for tokenization. This may include handling missing values, removing irrelevant symbols, and standardizing text formats.
@@ -163,120 +154,17 @@ Data preprocessing is managed by ZenML, ensuring consistency and ease in data ha
 4. **Prepare Dataloaders**:
    - This step, `prepare_dataloaders`, converts the training and testing datasets into data loaders compatible with PyTorch. Using the specified tokenizer from `TrainingPipelineParams`, the data is tokenized and batched. This step returns `train_loader` and `val_loader` dictionaries, ready for use in model training and evaluation.
 
-### Example Pipeline Setup and Execution
-
-```python
-from config import config
-from training_data_pipeline import training_data_pipeline, TrainingPipelineParams
-from src.data import load, preprocess, split, prepare_dataloaders
-
-# Define pipeline parameters
-pipeline_params = TrainingPipelineParams(
-    batch_size=config.batch_size,
-    tokenizer_name=config.tokenizer_name,
-    split_ratio=config.split_ratio)
-
-# Initialize pipeline steps
-load_instance = load()
-preprocess_instance = preprocess()
-split_instance = split(params=pipeline_params)
-prepare_dataloaders_instance = prepare_dataloaders(params=pipeline_params)
-
-# Create and run pipeline instance
-training_data_pipeline_instance = training_data_pipeline(
-    load=load_instance,
-    preprocess=preprocess_instance,
-    split=split_instance,
-    prepare_dataloaders=prepare_dataloaders_instance)
-
-training_data_pipeline_instance.run()
-```
-
-This pipeline simplifies the end-to-end data preparation process, from loading raw data to generating preprocessed data loaders for model training.
-
-### Extracting Dataloaders from the Latest Pipeline Run
-
-The `extract_latest_loaders` function allows you to access the data loaders from the most recent `training_data_pipeline` run. Using ZenML’s client API, it retrieves the output artifacts from the `prepare_dataloaders` step in the latest pipeline execution, providing the latest `train_loader` and `val_loader` directly for immediate use.
-
 ### Model Training, Evaluation, and Tracking
 
 Model training is conducted within the `model_experiments.ipynb` notebook, where various architectures can be implemented for sentiment classification. While a BERT-based model is currently set up as a primary example, the flexible framework allows for experimentation with different model architectures. MLflow is used extensively for experiment tracking, versioning, and model management.
 
-### Training Workflow
-
-1. **Data Loader Extraction**:
-   - The notebook starts by retrieving data loaders (`train_loader` and `val_loader`) from the most recent ZenML pipeline run, ensuring that training consistently uses the latest preprocessed data.
-
-2. **Model Architecture**:
-   - The notebook includes a primary example architecture, `SentimentAnalysisModel`, which uses a pre-trained BERT model with a fully connected layer for classification. However, the notebook’s flexible structure allows for easy integration of additional architectures. 
-   - This setup enables experimentation with different models, such as alternative transformer architectures (e.g., RoBERTa, DistilBERT) or custom layers tailored to specific dataset characteristics.
-   - The model architecture can be modified and tested in the same notebook, with each variant tracked separately in MLflow, allowing users to compare performance metrics across different model versions.
-
-3. **Training and Validation Functions**:
-   - **`train_one_epoch`**: This function performs a forward pass for each batch, computes the loss, and updates model parameters. Training loss per epoch is logged to MLflow for comprehensive tracking.
-   - **`val_one_epoch`**: This function evaluates the model on validation data, computing loss and accuracy. Improved validation accuracy prompts the model to be saved as the current best and logs these metrics to MLflow.
-
-4. **MLflow Integration**:
-   - MLflow is central to tracking experiments, model versions, and ensuring reproducibility. Key features include:
-     - **Parameter Logging**: Logs key hyperparameters such as learning rate, batch size, and number of epochs.
-     - **Metric Logging**: Tracks both training and validation losses, as well as validation accuracy, across epochs.
-     - **Model Versioning**: After training, models are registered in MLflow’s Model Registry, which manages different versions and provides easy access to previous models.
-     - **Champion Model Selection**: Each experiment can automatically assign the “Champion” alias to the model version with the best validation accuracy. This feature ensures that the best model version is easily accessible for further deployment or inference tasks.
-
-### Model Evaluation and Metrics
-
-Evaluation is based on several key metrics to ensure reliable performance:
-
-- **Training Loss**: Monitors model fit on the training dataset.
-- **Validation Loss**: Evaluates model performance on unseen data.
-- **Validation Accuracy**: Measures the proportion of correct predictions on the validation set.
-- **Precision, Recall, and F1-Score** (optional): Additional metrics that can be logged, especially useful when analyzing performance across specific classes.
-
-These metrics, logged with MLflow, provide insights for fine-tuning model performance and comparing the effectiveness of different model architectures.
-
-### Example Workflow for Model Training and Evaluation
-
-```python
-from src.data import SentimentAnalysisModel, train_one_epoch, val_one_epoch, register_model, update_champion_alias
-import mlflow
-import torch.optim as optim
-import os
-
-# Model and training configuration
-epochs = 5
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-learning_rate = 2e-5
-model_name = 'sentiment_analysis_experiment'
-
-# Initialize model, criterion, and optimizer
-model = SentimentAnalysisModel(bert_model_name='bert-base-uncased', num_labels=3).to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-
-# Tracking with MLflow
-with mlflow.start_run():
-    mlflow.log_param("learning_rate", learning_rate)
-    mlflow.log_param("epochs", epochs)
-    for epoch in range(epochs):
-        train_one_epoch(model, train_loader, optimizer, criterion, device, epoch)
-        best_so_far = val_one_epoch(model, val_loader, criterion, device, epoch, best_so_far, model_name)
-    # Register and assign Champion model
-    run_id = mlflow.active_run().info.run_id
-    register_model(run_id, model_name, "Experimenting with BERT-based architecture")
-    update_champion_alias(model_name)
-```
-
-### MLflow Model Registry
-
-The MLflow Model Registry manages model version control and provides a seamless way to select the best-performing model as the "Champion." This approach simplifies model comparison and access, ensuring that only the highest-performing version is used for production or deployment tasks. The registry’s alias feature allows easy access to the Champion model, reducing overhead when working with multiple model architectures and versions.
-
 ## Web App & Deployment
 
-The project includes a web application with both a REST API (powered by FastAPI) and a user-friendly UI (built with Streamlit) for sentiment analysis of financial news or tweets. The entire application is containerized and managed with Docker, enabling streamlined deployment and efficient resource management.
+The project includes a web application with both a REST API (powered by FastAPI) and a user-friendly UI (built with Streamlit) for sentiment analysis of financial news tweets. The entire application is containerized and managed with Docker, enabling streamlined deployment and efficient resource management.
 
 ### REST API with FastAPI
 
-- **FastAPI** is used to create a REST API endpoint that accepts a string input (e.g., a tweet or news excerpt) and returns its sentiment. Upon receiving a request:
+- **FastAPI** is used to create a REST API endpoint that accepts a tweet and returns its sentiment. Upon receiving a request:
   - The API performs **model inference** to classify the sentiment as positive, neutral, or negative.
   - **Inference time** is also calculated and returned with the result to provide insight into the model’s performance in real-time applications.
 
@@ -290,7 +178,9 @@ The project is containerized with Docker for consistent and lightweight deployme
 
 1. **Dockerfiles**:
    - **API Dockerfile**: Builds an image for the FastAPI-based backend, allowing it to handle sentiment analysis requests.
-   - **App Dockerfile**: Builds an image for the Streamlit UI, enabling user-friendly interaction with the model.
+  
+
+ - **App Dockerfile**: Builds an image for the Streamlit UI, enabling user-friendly interaction with the model.
 
 2. **Docker Compose**:
    - A `docker-compose.yml` file is used to build and run both the API and UI containers together.
@@ -308,7 +198,6 @@ This command builds and launches both containers, setting up the FastAPI backend
 
 This containerized deployment setup ensures that the web app is easily scalable and can be deployed consistently across different environments, supporting efficient and responsive sentiment analysis applications.
 
-
 ## Usage
 
 ### FastAPI
@@ -318,12 +207,12 @@ Once deployed, the API accepts HTTP POST requests for sentiment predictions:
 import requests
 
 response = requests.post("http://localhost:8000/predict", json={"tweet": "Sample financial news tweet"})
-print(response.json())  # {'sentiment': 'positive', 'processing time': 0.06371}
+print(response.json())  # {'tweet': 'Sample financial news tweet', 'sentiment': 'positive', 'processing_time_seconds': 0.06371}
 ```
 
 ### Streamlit
 
-Access the Streamlit app at `http://localhost:8501` to interactively classify news articles.
+Access the Streamlit app at `http://localhost:8501` to interactively classify tweets.
 
 ## Contributing
 
@@ -335,8 +224,8 @@ Contributions are welcome! Follow these steps to contribute:
 4. Push to the branch: `git push origin feature/new-feature`.
 5. Open a pull request.
 
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
----
+
+--- 
