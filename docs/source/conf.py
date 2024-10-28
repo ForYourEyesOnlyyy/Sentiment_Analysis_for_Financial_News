@@ -15,19 +15,17 @@ author = 'Maxim Martyshov, Elisey Smirnov, Roman Makeev'
 
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',            # For Google-style and NumPy-style docstrings
-    'sphinx.ext.autosummary',         # For automatic summary tables
-    'sphinx_autodoc_typehints',       # For type hints in function signatures
-    'myst_parser',                    # For Markdown files
-    'nbsphinx',                       # For Jupyter notebooks
+    'sphinx.ext.napoleon',  # For Google-style and NumPy-style docstrings
+    'sphinx.ext.autosummary',  # For automatic summary tables
+    'sphinx_autodoc_typehints',  # For type hints in function signatures
+    'myst_parser',  # For Markdown files
+    'nbsphinx',  # For Jupyter notebooks
     'sphinx.ext.viewcode',
-    'sphinx_rtd_theme'             # Adds links to source code
+    'sphinx_rtd_theme'  # Adds links to source code
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -42,6 +40,7 @@ html_static_path = ['_static']
 
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath(".."))
 
 source_suffix = ['.rst', '.md', '.ipynb']
