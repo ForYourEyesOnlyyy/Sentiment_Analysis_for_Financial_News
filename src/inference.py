@@ -1,3 +1,21 @@
+"""
+inference.py
+
+This module provides functions for loading models and performing inference on financial tweets, 
+returning sentiment predictions. It includes functions for loading a model from the MLflow registry, 
+running inference, and generating sentiment predictions using tokenized data.
+
+Functions:
+    load_model_from_registry: Loads a specified version of a model from the MLflow model registry.
+    predict: Generates a sentiment prediction for a given dataset sample.
+    run_inference: Runs the entire inference pipeline on a single tweet.
+    predict_sentiment: A high-level function to predict sentiment for a given tweet.
+
+Usage:
+    This module is designed for use in other modules to perform inference on tweets. 
+    It requires a model registered in the MLflow registry and a compatible tokenizer.
+"""
+
 import os
 import sys
 from time import time
@@ -12,7 +30,20 @@ from config import config
 client = MlflowClient()
 
 
-def load_model_from_registry(model_name, version="champion"):
+def load_model_from_registry(model_name: str, version="champion") -> any:
+    """Loads a model from the MLflow registry by name and version.
+
+    Args:
+        model_name (str): The name of the model in the MLflow registry.
+        version (str, optional): The version of the model to load. 
+            Defaults to "champion" (latest best-performing model).
+
+    Returns:
+        any: The loaded PyTorch model.
+
+    Raises:
+        ValueError: If the specified version does not exist in the registry.
+    """
     if version == "champion":
         global client
         champion_version = client.get_model_version_by_alias(
@@ -29,6 +60,19 @@ def load_model_from_registry(model_name, version="champion"):
 
 def predict(model: any, dataset: data.FinancialTweetsDataset,
             device: str) -> str:
+    """Generates a sentiment prediction for a single tweet sample.
+
+    Args:
+        model (any): The pre-trained PyTorch model used for predictions.
+        dataset (FinancialTweetsDataset): The dataset containing tokenized input for the tweet.
+        device (str): The device on which the model will perform inference (e.g., 'cpu' or 'cuda').
+
+    Returns:
+        str: The predicted sentiment label.
+
+    Raises:
+        ValueError: If the model returns more than one prediction for a single sample.
+    """
     dataset = dataset[0]
     model.to(device)
     model.eval()
@@ -54,6 +98,18 @@ def predict(model: any, dataset: data.FinancialTweetsDataset,
 
 def run_inference(tweet: str, tokenizer: any, max_length: int, model: any,
                   device: str) -> str:
+    """Processes a tweet and runs inference to obtain a sentiment prediction.
+
+    Args:
+        tweet (str): The tweet text to analyze.
+        tokenizer (any): Tokenizer used to preprocess the tweet.
+        max_length (int): Maximum token length for the input sequence.
+        model (any): The pre-trained model to use for prediction.
+        device (str): The device on which the model will run (e.g., 'cpu' or 'cuda').
+
+    Returns:
+        str: The predicted sentiment label.
+    """
     tweet_df = data.make_dataframe_with_dummy_label(tweet)
     tweet_df = data.preprocess_data(tweet_df)
     tweet_dataset = data.FinancialTweetsDataset(
@@ -63,6 +119,16 @@ def run_inference(tweet: str, tokenizer: any, max_length: int, model: any,
 
 
 def predict_sentiment(tweet: str, tokenizer: any, model: any) -> str:
+    """A high-level function to predict the sentiment of a tweet.
+
+    Args:
+        tweet (str): The tweet text for sentiment prediction.
+        tokenizer (any): The tokenizer to preprocess the text input.
+        model (any): The pre-trained model used for sentiment analysis.
+
+    Returns:
+        str: The predicted sentiment label.
+    """
     max_length = config.max_length
     device = config.device
     return run_inference(tweet, tokenizer, max_length, model, device)
