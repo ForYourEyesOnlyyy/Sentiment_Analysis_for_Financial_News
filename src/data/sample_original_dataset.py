@@ -1,3 +1,25 @@
+"""
+sample_original_dataset.py
+
+This script creates multiple stratified samples from a single original dataset. 
+It loads a financial news sentiment dataset from Hugging Face's `datasets` library and 
+generates several samples with specified stratification, ensuring that each class is 
+represented proportionally according to a defined percentage. The generated samples 
+are saved as CSV files for further use in model training or evaluation.
+
+Usage:
+    Adjust the `num_samples`, `rows_per_sample`, and `stratify_percentage` variables 
+    to control the number of samples, the rows per sample, and the class stratification 
+    ratio. Run the script to generate and save stratified samples in the specified directory.
+
+Attributes:
+    dataset (Dataset): The original financial news sentiment dataset.
+    sample_dir (str): Directory where the stratified samples are saved.
+    num_samples (int): Number of stratified samples to create.
+    rows_per_sample (int): Number of rows per sample.
+    stratify_percentage (float): Percentage of samples to take from each class for stratification.
+"""
+
 import os
 import pandas as pd
 from datasets import load_dataset
