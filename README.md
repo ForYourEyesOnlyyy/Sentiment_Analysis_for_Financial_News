@@ -11,6 +11,8 @@ This project leverages a machine learning-based solution to classify the sentime
 - [Data Processing and Pipelines](#data-processing-and-pipelines)
 - [Model Training and Evaluation](#model-training-and-evaluation)
 - [Web App & Deployment](#web-app--deployment)
+- [Usage](#usage)
+- [Contributing](#contributing)
 - [License](#license)
 
 ---
@@ -116,13 +118,32 @@ After completing these steps, you're ready to start using or contributing to the
 
 ### Running the Web App
 
-To launch the web app (FastAPI backend and Streamlit UI), follow these steps:
-1. Run the setup script as described above.
-2. Run the following command to start the app:
+Here's the updated **Web App & Deployment** section with options for running the app via Docker or Bash:
+
+---
+
+## Web App & Deployment
+
+The project includes a web application with both a REST API (powered by FastAPI) and a user-friendly UI (built with Streamlit) for sentiment analysis of financial news or tweets. The application can be run either using Docker or directly via Bash commands.
+
+### Running the Web App
+
+To launch the web app (FastAPI backend and Streamlit UI), follow one of the two methods below:
+
+#### Option 1: Run with Docker
+
+1. Make sure Docker is installed and running on your system.
+2. Use Docker Compose to build and run the application:
+    ```bash
+    docker-compose -f deployment/docker-compose.yml up --build
+    ```
+
+#### Option 2: Run with Bash Scripts
+
+1. Use the following command to start the app:
     ```bash
     bash run.sh
     ```
-
 
 ## Data Processing and Pipelines
 
@@ -286,6 +307,34 @@ docker-compose -f deployment/docker-compose.yml up --build
 This command builds and launches both containers, setting up the FastAPI backend and Streamlit UI to work seamlessly together in a single network. The setup allows the API to process requests from the Streamlit UI efficiently and returns sentiment results and inference times directly to the user. 
 
 This containerized deployment setup ensures that the web app is easily scalable and can be deployed consistently across different environments, supporting efficient and responsive sentiment analysis applications.
+
+
+## Usage
+
+### FastAPI
+
+Once deployed, the API accepts HTTP POST requests for sentiment predictions:
+```python
+import requests
+
+response = requests.post("http://localhost:8000/predict", json={"tweet": "Sample financial news tweet"})
+print(response.json())  # {'sentiment': 'positive', 'processing time': 0.06371}
+```
+
+### Streamlit
+
+Access the Streamlit app at `http://localhost:8501` to interactively classify news articles.
+
+## Contributing
+
+Contributions are welcome! Follow these steps to contribute:
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/new-feature`.
+3. Commit your changes: `git commit -m 'Add new feature'`.
+4. Push to the branch: `git push origin feature/new-feature`.
+5. Open a pull request.
+
 
 ## License
 
