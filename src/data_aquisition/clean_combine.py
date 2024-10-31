@@ -1,15 +1,18 @@
 import pandas as pd
 
+
 def clean_auditor(df):
     df = df.rename(columns={'sentence': 'text', 'label': 'label'})
     df['label'] = df['label'].replace({1: 2, 2: 1})
     return df
+
 
 def clean_phrasebank(df):
     labels = {"negative": 0, "positive": 1, "neutral": 2}
     df = df.rename(columns={'text': 'text', 'sentiment': 'label'})
     df['label'] = df['label'].replace(labels)
     return df
+
 
 def set_column_types(df):
     """
@@ -23,11 +26,12 @@ def set_column_types(df):
     """
     # Set 'text' column as string
     df['text'] = df['text'].astype(str)
-    
+
     # Set 'label' column as integer
     df['label'] = df['label'].astype(int)
-    
+
     return df
+
 
 # Load the datasets
 zero_shot = pd.read_csv('./data/unprocessed/combined_zeroshot.csv')
@@ -43,7 +47,6 @@ full_df = full_df.sample(frac=1).reset_index(drop=True)
 
 # Set column types
 full_df = set_column_types(full_df)
-
 
 # Save the combined dataset
 full_df.to_csv('./data/processed/combined_full.csv', index=False)

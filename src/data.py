@@ -100,9 +100,9 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
     def clean_text(text):
         text = re.sub(r'\s+,', ',', text)  # Remove spaces before commas
-        text = re.sub(r'[\'".]+$', '', text)  # Remove quotes and full stops at the end
+        text = re.sub(r'[\'".]+$', '',
+                      text)  # Remove quotes and full stops at the end
         return text
-
 
     def process_source_links(row):
         if 'https' in row[text_column]:
@@ -111,7 +111,7 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
         else:
             row[has_source_column] = 0
         return row
-    
+
     def balance_dataset(df):
         # Separate majority and minority classes
         df_majority = df[df.label == 2]
@@ -119,13 +119,15 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
         df_minority_0 = df[df.label == 0]
 
         # Downsample majority class
-        df_majority_downsampled = resample(df_majority, 
-                                        replace=False,    # sample without replacement
-                                        n_samples=len(df_minority_1),  # to match minority class
-                                        random_state=42)  # reproducible results
+        df_majority_downsampled = resample(
+            df_majority,
+            replace=False,  # sample without replacement
+            n_samples=len(df_minority_1),  # to match minority class
+            random_state=42)  # reproducible results
 
         # Combine minority class with downsampled majority class
-        df_balanced = pd.concat([df_majority_downsampled, df_minority_1, df_minority_0])
+        df_balanced = pd.concat(
+            [df_majority_downsampled, df_minority_1, df_minority_0])
 
         return df_balanced
 
