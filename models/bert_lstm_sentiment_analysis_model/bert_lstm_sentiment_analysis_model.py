@@ -45,11 +45,14 @@ class LSTMSentimentAnalysisModel(nn.Module):
         batchnorm2 (nn.BatchNorm1d): Batch normalization layer for output of first fully connected layer.
     """
 
-    def __init__(self, bert_model_name='bert-base-uncased', num_labels=3, hidden_dim=128):
+    def __init__(self,
+                 bert_model_name='bert-base-uncased',
+                 num_labels=3,
+                 hidden_dim=128):
         super(LSTMSentimentAnalysisModel, self).__init__()
-        
+
         self.bert = BertModel.from_pretrained(bert_model_name)
-        
+
         # Freeze BERT layers except for the last three for efficiency
         for param in self.bert.parameters():
             param.requires_grad = False
@@ -57,16 +60,19 @@ class LSTMSentimentAnalysisModel(nn.Module):
             param.requires_grad = True
 
         # Define LSTM layer
-        self.lstm = nn.LSTM(self.bert.config.hidden_size, hidden_dim, num_layers=1, 
-                            bidirectional=True, batch_first=True)
-        
+        self.lstm = nn.LSTM(self.bert.config.hidden_size,
+                            hidden_dim,
+                            num_layers=1,
+                            bidirectional=True,
+                            batch_first=True)
+
         # Attention layer to compute weights over LSTM output
         self.attention = nn.Linear(hidden_dim * 2, 1)
-        
+
         # Fully connected layers for classification
         self.fc1 = nn.Linear(hidden_dim * 2, 64)
         self.fc2 = nn.Linear(64, num_labels)
-        
+
         # Regularization layers
         self.dropout = nn.Dropout(0.5)
         self.batchnorm1 = nn.BatchNorm1d(hidden_dim * 2)
@@ -87,10 +93,10 @@ class LSTMSentimentAnalysisModel(nn.Module):
         # Extract embeddings from BERT
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
         embeddings = outputs.last_hidden_state
-        
+
         # LSTM layer for sequential processing
         lstm_out, _ = self.lstm(embeddings)
-        
+
         # Compute attention weights over LSTM output and apply them
         attention_weights = torch.softmax(self.attention(lstm_out), dim=1)
         attended_output = torch.sum(lstm_out * attention_weights, dim=1)
@@ -100,5 +106,5 @@ class LSTMSentimentAnalysisModel(nn.Module):
         out = self.dropout(torch.relu(self.fc1(out)))
         out = self.batchnorm2(out)
         logits = self.fc2(out)
-        
+
         return logits
