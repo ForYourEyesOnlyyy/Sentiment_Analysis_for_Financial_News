@@ -45,7 +45,7 @@ class TrainingPipelineParams(BaseParameters):
     split_ratio: float
 
 
-@step
+@step(enable_cache=False)
 def load() -> pd.DataFrame:
     """Loads the raw tweet data as a DataFrame.
 
@@ -55,7 +55,7 @@ def load() -> pd.DataFrame:
     return data.load_data()
 
 
-@step
+@step(enable_cache=False)
 def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     """Preprocesses tweet data by removing URLs and setting source flags.
 
@@ -68,7 +68,7 @@ def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     return data.preprocess_data(df)
 
 
-@step
+@step(enable_cache=False)
 def split(params: TrainingPipelineParams, df: pd.DataFrame) -> dict:
     """Splits the preprocessed data into training and validation sets.
 
@@ -82,7 +82,7 @@ def split(params: TrainingPipelineParams, df: pd.DataFrame) -> dict:
     return data.split(df, ratio=params.split_ratio)
 
 
-@step
+@step(enable_cache=False)
 def prepare_dataloaders(params: TrainingPipelineParams,
                         train_test: dict) -> dict:
     """Prepares data loaders for the training and validation sets.

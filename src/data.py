@@ -26,6 +26,7 @@ import re
 import warnings
 
 import pandas as pd
+from sklearn.utils import resample
 from sklearn.model_selection import train_test_split
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -74,19 +75,34 @@ def load_data() -> pd.DataFrame:
     Returns:
         pd.DataFrame: The loaded data as a pandas DataFrame.
     """
-    return pd.read_csv(data_path)
+    df = pd.read_csv(data_path)
+    print(f"Loaded {len(df)} tweets from {data_path}")
+    return df
 
 
 def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
-    """Preprocesses data by removing URLs from text and setting a source flag.
+    """Preprocesses data by cleaning text, removing URLs, setting a source flag, and balancing class distributions.
 
     Args:
-        data (pd.DataFrame): Raw data to preprocess.
+        data (pd.DataFrame): Raw tweet data to preprocess.
 
     Returns:
-        pd.DataFrame: The preprocessed data with URLs removed from text and an
-            additional column indicating the presence of a source link.
+        pd.DataFrame: The preprocessed data with:
+            - Cleaned tweet text (extra spaces and punctuation removed).
+            - URLs removed from text, with an added column indicating the presence of a source link.
+            - Balanced class distributions by downsampling the majority class to match minority classes.
+
+    Steps:
+        1. Clean text by removing unnecessary punctuation and spaces.
+        2. Remove URLs from tweet text and add a binary flag (`has_source`) indicating if a URL was present.
+        3. Balance the dataset to handle class imbalance by downsampling the majority class.
     """
+
+    def clean_text(text):
+        text = re.sub(r'\s+,', ',', text)  # Remove spaces before commas
+        text = re.sub(r'[\'".]+$', '', text)  # Remove quotes and full stops at the end
+        return text
+
 
     def process_source_links(row):
         if 'https' in row[text_column]:
@@ -95,8 +111,27 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
         else:
             row[has_source_column] = 0
         return row
+    
+    def balance_dataset(df):
+        # Separate majority and minority classes
+        df_majority = df[df.label == 2]
+        df_minority_1 = df[df.label == 1]
+        df_minority_0 = df[df.label == 0]
+
+        # Downsample majority class
+        df_majority_downsampled = resample(df_majority, 
+                                        replace=False,    # sample without replacement
+                                        n_samples=len(df_minority_1),  # to match minority class
+                                        random_state=42)  # reproducible results
+
+        # Combine minority class with downsampled majority class
+        df_balanced = pd.concat([df_majority_downsampled, df_minority_1, df_minority_0])
+
+        return df_balanced
 
     data = data.apply(process_source_links, axis=1)
+    data[text_column] = data[text_column].apply(clean_text)
+    data = balance_dataset(data)
     return data
 
 

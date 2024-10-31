@@ -29,7 +29,7 @@ Attributes:
 """
 
 # DATA
-data_path = "data/processed/twitter-financial-news-sentiment/samples/sample1.csv"
+data_path = "data/processed/combined_full.csv"
 label_column = "label"
 text_column = "text"
 has_source_column = "has_source"
