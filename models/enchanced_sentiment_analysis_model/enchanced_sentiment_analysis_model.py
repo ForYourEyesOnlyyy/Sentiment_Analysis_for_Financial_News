@@ -47,11 +47,11 @@ class EnhancedSentimentAnalysisModel(nn.Module):
 
         # Initialize BERT model
         self.bert = BertModel.from_pretrained(bert_model_name)
-        
+
         # Hidden layer to process BERT embeddings with additional input
         self.hidden_layer = nn.Linear(self.bert.config.hidden_size + 1, 128)
         self.activation = nn.ReLU()
-        
+
         # Dropout for regularization
         self.dropout = nn.Dropout(0.5)
 
@@ -70,7 +70,8 @@ class EnhancedSentimentAnalysisModel(nn.Module):
             torch.Tensor: Logits representing the model's sentiment predictions for each input sample.
         """
         # Generate embeddings using BERT
-        embeddings = self.bert(input_ids=input_ids, attention_mask=attention_mask).pooler_output
+        embeddings = self.bert(input_ids=input_ids,
+                               attention_mask=attention_mask).pooler_output
 
         # Add source feature and concatenate with embeddings
         has_source = has_source.unsqueeze(1)
