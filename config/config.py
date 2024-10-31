@@ -33,7 +33,8 @@ data_path = "data/processed/twitter-financial-news-sentiment/samples/sample1.csv
 label_column = "label"
 text_column = "text"
 has_source_column = "has_source"
-sentiments = {0: "Negative", 1: "Neutral", 2: "Positive"}
+sentiments = {0: "Negative", 1: "Positive", 2: "Neutral"}
+labels = {"Negative": 0, "Positive": 1, "Neutral": 2}
 
 # DATASET
 batch_size = 32
