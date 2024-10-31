@@ -9,8 +9,16 @@ and it uses a custom error handler to manage input validation errors.
 Classes:
     TweetInput: Pydantic model for input validation, ensuring tweet text is within 1-280 characters.
 
+Global Variables:
+    model (SentimentAnalysisModel): The sentiment analysis model loaded at startup.
+    tokenizer (AutoTokenizer): Tokenizer instance associated with the model.
+
 Endpoints:
     /predict-sentiment/ (POST): Accepts a tweet and returns the predicted sentiment.
+
+Attributes:
+    model (SentimentAnalysisModel): The sentiment analysis model used for predictions.
+    tokenizer (AutoTokenizer): Tokenizer used for preprocessing tweets before sentiment prediction.
 
 Usage:
     Run this app to serve sentiment predictions via an API. The model and tokenizer are loaded 
@@ -23,6 +31,7 @@ import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+import torch
 
 from config import config
 from src import data
@@ -70,12 +79,9 @@ async def lifespan(app: FastAPI):
     global model, tokenizer
 
     # Load model and tokenizer at startup
-    import torch
-    from models.ssam.simple_sentiment_analysis_model import SentimentAnalysisModel
-    model = SentimentAnalysisModel()
+    model = config.model_class
     model.load_state_dict(
-        torch.load('models/ssam/model_weights.pth',
-                   map_location=config.device))
+        torch.load(config.model_weights_path, map_location=config.device))
     logging.info(f"Model {config.model_name} loaded successfully at startup.")
 
     tokenizer = data.get_tokenizer(config.tokenizer_name)

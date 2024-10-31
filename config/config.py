@@ -21,6 +21,10 @@ Attributes:
     # Model Parameters
     tokenizer_name (str): The name of the tokenizer used for preprocessing.
     model_name (str): Name of the model used for sentiment analysis.
+    model_class (obj): Instance of the model class used for sentiment analysis.
+    model_weights_path (str): File path for saving and loading the model's weights.
+    
+    # Device Configuration
     device (str): Device to run the model on (e.g., 'cpu' or 'cuda').
 """
 
@@ -39,4 +43,10 @@ max_length = 100
 # MODELS
 tokenizer_name = 'bert-base-uncased'
 model_name = 'simple_sentiment_analysis_model'
+from models.simple_sentiment_analysis_model.simple_sentiment_analysis_model import SentimentAnalysisModel
+
+model_class = SentimentAnalysisModel()
+model_weights_path = f'models/{model_name}/model_weights.pth'
+
+# DEVICE
 device = 'cpu'
