@@ -38,8 +38,8 @@ labels = {"Negative": 0, "Positive": 1, "Neutral": 2}
 
 # DATASET
 batch_size = 32
-split_ratio = 0.33
-max_length = 100
+split_ratio = 0.3
+max_length = 350
 
 # MODELS
 tokenizer_name = 'bert-base-uncased'
