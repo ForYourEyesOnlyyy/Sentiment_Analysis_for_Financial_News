@@ -111,7 +111,7 @@ def run_inference(tweet: str, tokenizer: any, max_length: int, model: any,
         str: The predicted sentiment label.
     """
     tweet_df = data.make_dataframe_with_dummy_label(tweet)
-    tweet_df = data.preprocess_data(tweet_df)
+    tweet_df = data.preprocess_data(tweet_df, balance=False)
     tweet_dataset = data.FinancialTweetsDataset(
         tweet_df[data.text_column], tweet_df[data.has_source_column],
         tweet_df[data.label_column], tokenizer, max_length)

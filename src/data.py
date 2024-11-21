@@ -80,7 +80,7 @@ def load_data() -> pd.DataFrame:
     return df
 
 
-def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
+def preprocess_data(data: pd.DataFrame, balance=True) -> pd.DataFrame:
     """Preprocesses data by cleaning text, removing URLs, setting a source flag, and balancing class distributions.
 
     Args:
@@ -133,7 +133,8 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
     data = data.apply(process_source_links, axis=1)
     data[text_column] = data[text_column].apply(clean_text)
-    data = balance_dataset(data)
+    if balance:
+        data = balance_dataset(data)
     return data
 
 
