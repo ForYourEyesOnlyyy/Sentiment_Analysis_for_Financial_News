@@ -2,7 +2,7 @@
 
 # Set environment variable for macOS fork safety
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY='YES'
-
+export ZENML_DISABLE_CLIENT_SERVER_MISMATCH_WARNING=True
 # Default values
 PORT=""
 
